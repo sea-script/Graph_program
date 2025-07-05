@@ -1,0 +1,74 @@
+menu = {}
+
+function menu.load()
+    --dimensions 
+    margin = 100
+    w,h = (width-3*margin)/2, (height-3*margin)/2
+    --the possible options
+    charts = {}
+    charts[1] = {width = w, height = h, x = margin    , y = margin} --bar
+    charts[2] = {width = w, height = h, x = margin*2+w, y = margin} --line
+    charts[3] = {width = w, height = h, x = margin    , y = margin*2+h} --scatter
+    charts[4] = {width = w, height = h, x = margin*2+w, y = margin*2+h} --area
+    --there is probably a better way to organize this but idc
+
+    --for the selecting animation
+    select_rect = {}
+    for i = 1, #charts do
+        select_rect[i] = {}
+        select_rect[i].x = charts[i].x/2 
+        select_rect[i].y = charts[i].y/2 
+        select_rect[i].width = 0
+        select_rect[i].height = 0
+    end
+    
+    grow_speed = 4
+end
+
+function menu.update(dt)
+    for i = 1, #charts do
+        if(mouse_x >= charts[i].x and mouse_x <= charts[i].x + charts[i].width) and (mouse_y >= charts[i].y and mouse_y <= charts[i].y + charts[i].height) then --if mouse over the option
+            select_rect[i].x = select_rect[i].x - grow_speed
+            select_rect[i].y = select_rect[i].y - grow_speed
+            select_rect[i].width = select_rect[i].width + 2*grow_speed
+            select_rect[i].height = select_rect[i].height + 2*grow_speed
+            --max
+            if(select_rect[i].x <= charts[i].x and select_rect[i].y <= charts[i].y) then
+                select_rect[i].x = charts[i].x
+                select_rect[i].y = charts[i].y
+                select_rect[i].width = charts[i].width
+                select_rect[i].height = charts[i].height
+
+            end
+        else --if out of rect
+            --set to default 
+            select_rect[i].x = charts[i].x + charts[i].width/2
+            select_rect[i].y = charts[i].y + charts[i].height/2
+            select_rect[i].width = 0
+            select_rect[i].height = 0
+        end
+    end
+end
+
+function menu.mousepressed(x,y,buttonID)
+    if buttonID == 1 then
+        for i = 1, #charts do
+            if((x >= charts[i].x and x <= charts[i].x + charts[i].width) and (y >= charts[i].y and y <= charts[i].y + charts[i].height)) then
+                --smt
+            end
+        end
+    end
+end
+
+function menu.draw()
+    
+    for i = 1, #charts do
+        love.graphics.setColor(1,1,1)
+        love.graphics.rectangle("line", charts[i].x, charts[i].y, charts[i].width, charts[i].height)
+        love.graphics.setColor(0,0.8,0.3)
+        love.graphics.rectangle("fill", select_rect[i].x, select_rect[i].y, select_rect[i].width, select_rect[i].height)
+    end
+    
+end
+
+return menu
