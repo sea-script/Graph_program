@@ -2,15 +2,15 @@ menu = {}
 
 function menu.load()
     --dimensions 
-    margin = 100
+    local margin = 100
     w,h = (width-3*margin)/2, (height-3*margin)/2
-    --the possible options
+
+    --the 4 possible options
     charts = {}
     charts[1] = {width = w, height = h, x = margin    , y = margin} --bar
     charts[2] = {width = w, height = h, x = margin*2+w, y = margin} --line
     charts[3] = {width = w, height = h, x = margin    , y = margin*2+h} --scatter
     charts[4] = {width = w, height = h, x = margin*2+w, y = margin*2+h} --area
-    --there is probably a better way to organize this but idc
 
     --for the selecting animation
     select_rect = {}
@@ -22,17 +22,20 @@ function menu.load()
         select_rect[i].height = 0
     end
     
-    grow_speed = 4
+    grow_speed = 6
+    red = {193/255, 0, 0}
+
 end
 
 function menu.update(dt)
+    --playing the animation
     for i = 1, #charts do
         if(mouse_x >= charts[i].x and mouse_x <= charts[i].x + charts[i].width) and (mouse_y >= charts[i].y and mouse_y <= charts[i].y + charts[i].height) then --if mouse over the option
             select_rect[i].x = select_rect[i].x - grow_speed
             select_rect[i].y = select_rect[i].y - grow_speed
             select_rect[i].width = select_rect[i].width + 2*grow_speed
             select_rect[i].height = select_rect[i].height + 2*grow_speed
-            --max
+            --max size
             if(select_rect[i].x <= charts[i].x and select_rect[i].y <= charts[i].y) then
                 select_rect[i].x = charts[i].x
                 select_rect[i].y = charts[i].y
@@ -50,11 +53,20 @@ function menu.update(dt)
     end
 end
 
-function menu.mousepressed(x,y,buttonID)
-    if buttonID == 1 then
+function menu.mousepressed(x,y,mouseID)
+    if mouseID == 1 then
         for i = 1, #charts do
             if((x >= charts[i].x and x <= charts[i].x + charts[i].width) and (y >= charts[i].y and y <= charts[i].y + charts[i].height)) then
-                --smt
+                if i == 1 then
+                    current_scn = bar_chart
+                elseif i == 2 then
+                    current_scn = line_chart
+                elseif i == 3 then
+                    current_scn = scatter_plot
+                else
+                    current_scn = area_chart
+                end
+                current_scn.load()
             end
         end
     end
@@ -65,7 +77,7 @@ function menu.draw()
     for i = 1, #charts do
         love.graphics.setColor(1,1,1)
         love.graphics.rectangle("line", charts[i].x, charts[i].y, charts[i].width, charts[i].height)
-        love.graphics.setColor(0,0.8,0.3)
+        love.graphics.setColor(red)
         love.graphics.rectangle("fill", select_rect[i].x, select_rect[i].y, select_rect[i].width, select_rect[i].height)
     end
     

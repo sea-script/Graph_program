@@ -1,25 +1,36 @@
---this file decides which scene is being displayed
 _G.love = require("love")
 
 --load the possible scenes
-local menu = require("scene/menu")
-local scene1 = require("scene/scene1")
+--bar chart, line chart, Scatter Plot, area chart 
+local menu = require("scene.menu")
+local bar_chart = require("scene.bar_chart")
+local line_chart = require("scene.line_chart")
+local scatter_plot = require("scene.scatter_plot")
+local area_chart = require("scene.area_chart")
 
-local current_scn = menu
+--pointer
+current_scn = menu
 
 function love.load()
+    --dimensions, global
     width, height = love.graphics.getDimensions()
     current_scn.load()
 end
 
 function love.update(dt)
-    --mouse position  
+    --mouse position, global
     mouse_x, mouse_y = love.mouse.getPosition()
     current_scn.update(dt)
+
+    --return to the menu
+    if(love.keyboard.isDown("escape")) then
+        current_scn = menu
+        current_scn.load()
+    end
 end
 
-function love.mousepressed(x,y,ID)
-    current_scn.mousepressed(mouse_x,mouse_y,ID)
+function love.mousepressed(x,y,mouseID)
+    current_scn.mousepressed(mouse_x,mouse_y,mouseID)
 end
 
 function love.draw()
