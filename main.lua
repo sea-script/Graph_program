@@ -12,6 +12,11 @@ local area_chart = require("scene.area_chart")
 current_scn = menu
 
 function love.load()
+    --color
+    red = {1,0,0}
+    green = {0,1,0}
+    blue = {0,0,1}
+    white = {1,1,1}
     --dimensions, global
     width, height = love.graphics.getDimensions()
     --input buffer, global

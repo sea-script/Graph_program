@@ -23,7 +23,6 @@ function menu.load()
     end
     
     grow_speed = 6
-    red = {193/255, 0, 0}
 
 end
 
@@ -79,7 +78,7 @@ end
 function menu.draw()
     
     for i = 1, #charts do
-        love.graphics.setColor(1,1,1)
+        love.graphics.setColor(white)
         love.graphics.rectangle("line", charts[i].x, charts[i].y, charts[i].width, charts[i].height)
         love.graphics.setColor(red)
         love.graphics.rectangle("fill", select_rect[i].x, select_rect[i].y, select_rect[i].width, select_rect[i].height)
