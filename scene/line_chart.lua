@@ -12,6 +12,10 @@ function line_chart.mousepressed(mouse_x, mouse_y, mouseID)
     
 end
 
+function line_chart.keypressed(key)
+    
+end
+
 function line_chart.draw()
     love.graphics.circle("line", 100,555, 10)
     love.graphics.print("line_chart")

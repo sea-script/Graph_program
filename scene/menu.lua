@@ -72,6 +72,10 @@ function menu.mousepressed(x,y,mouseID)
     end
 end
 
+function menu.keypressed(key)
+    
+end
+
 function menu.draw()
     
     for i = 1, #charts do

@@ -14,6 +14,8 @@ current_scn = menu
 function love.load()
     --dimensions, global
     width, height = love.graphics.getDimensions()
+    --input buffer, global
+    user_input = ""
     current_scn.load()
 end
 
@@ -21,16 +23,23 @@ function love.update(dt)
     --mouse position, global
     mouse_x, mouse_y = love.mouse.getPosition()
     current_scn.update(dt)
-
-    --return to the menu
-    if(love.keyboard.isDown("escape")) then
-        current_scn = menu
-        current_scn.load()
-    end
 end
 
 function love.mousepressed(x,y,mouseID)
     current_scn.mousepressed(mouse_x,mouse_y,mouseID)
+end
+
+function love.keypressed(key)
+    if (key == "escape" and current_scn ~= menu) then
+        current_scn = menu
+    end
+    current_scn.keypressed(key)
+end
+
+function love.textinput(t)
+    if current_scn.textinput then
+        current_scn.textinput(t)
+    end
 end
 
 function love.draw()

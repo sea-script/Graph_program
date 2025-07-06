@@ -12,6 +12,10 @@ function area_chart.mousepressed(mouse_x, mouse_y, mouseID)
     
 end
 
+function area_chart.keypressed(key)
+    
+end
+
 function area_chart.draw()
     love.graphics.circle("line", 100,555, 10)
     love.graphics.print("area_chart")
