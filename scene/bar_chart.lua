@@ -17,7 +17,16 @@ function bar_chart.load()
 end
 
 function bar_chart.update(dt)
-
+    --more accurate changes to the bars
+    for i = 1, display.xaxis_input do
+        if love.mouse.isDown(1) then
+            if(mouse_x >= bars[i].x and mouse_x <= bars[i].x + bars[i].width and mouse_y >= display.y and mouse_y < display.y + display.height) then
+                bars[i].y = mouse_y
+                bars[i].height = (display.y + display.height) - mouse_y
+            end
+        end
+    end
+    
 end
 
 function bar_chart.update_bars()
@@ -26,9 +35,9 @@ function bar_chart.update_bars()
         bars[i] = {} --delete old value or make a new one
         bars[i].margin = 0.05 * x_step_size --5% of the step size
         bars[i].width = x_step_size - (0.05 * 2 * x_step_size)
-        bars[i].height = 2 --change later
+        bars[i].height = 1 --change later
         bars[i].x = display.x + x_step_size*(i-1) + bars[i].margin
-        bars[i].y = display.y + display.height
+        bars[i].y = display.y + display.height -1
     end
 end
 
@@ -42,15 +51,6 @@ function bar_chart.mousepressed(mouse_x, mouse_y, mouseID)
         end
     end
 
-    --bars
-    for i = 1, display.xaxis_input do
-        if mouseID == 1 then
-            if(mouse_x >= bars[i].x and mouse_x <= bars[i].x + bars[i].width and mouse_y >= display.y and mouse_y < display.y + display.height) then
-                bars[i].y = mouse_y
-                bars[i].height = (display.y + display.height) - mouse_y
-            end
-        end
-    end
 end
 
 function bar_chart.keypressed(key)

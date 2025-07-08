@@ -7,10 +7,10 @@ function menu.load()
 
     --the 4 possible options
     charts = {}
-    charts[1] = {width = w, height = h, x = margin    , y = margin} --bar
-    charts[2] = {width = w, height = h, x = margin*2+w, y = margin} --line
-    charts[3] = {width = w, height = h, x = margin    , y = margin*2+h} --scatter
-    charts[4] = {width = w, height = h, x = margin*2+w, y = margin*2+h} --area
+    charts[1] = {width = w, height = h, x = margin    , y = margin, name = "BAR CHART"} --bar
+    charts[2] = {width = w, height = h, x = margin*2+w, y = margin, name = "LINE CHART"} --line
+    charts[3] = {width = w, height = h, x = margin    , y = margin*2+h, name = "SCATTER PLOT"} --scatter
+    charts[4] = {width = w, height = h, x = margin*2+w, y = margin*2+h, name = "AREA CHART"} --area
 
     --for the selecting animation
     select_rect = {}
@@ -76,12 +76,13 @@ function menu.keypressed(key)
 end
 
 function menu.draw()
-    
     for i = 1, #charts do
         love.graphics.setColor(white)
         love.graphics.rectangle("line", charts[i].x, charts[i].y, charts[i].width, charts[i].height)
         love.graphics.setColor(red)
         love.graphics.rectangle("fill", select_rect[i].x, select_rect[i].y, select_rect[i].width, select_rect[i].height)
+        love.graphics.setColor(white)
+        love.graphics.print(charts[i].name, (charts[i].x + charts[i].width/2) - (love.graphics.getFont():getWidth(charts[i].name)/2), (charts[i].y + charts[i].height/2)-4)
     end
     
 end
