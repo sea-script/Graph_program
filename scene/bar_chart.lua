@@ -41,6 +41,16 @@ function bar_chart.mousepressed(mouse_x, mouse_y, mouseID)
             bar_num_input_mode = true
         end
     end
+
+    --bars
+    for i = 1, display.xaxis_input do
+        if mouseID == 1 then
+            if(mouse_x >= bars[i].x and mouse_x <= bars[i].x + bars[i].width and mouse_y >= display.y and mouse_y < display.y + display.height) then
+                bars[i].y = mouse_y
+                bars[i].height = (display.y + display.height) - mouse_y
+            end
+        end
+    end
 end
 
 function bar_chart.keypressed(key)
