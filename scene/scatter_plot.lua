@@ -17,7 +17,7 @@ function scatter_plot.keypressed(key)
 end
 
 function scatter_plot.draw()
-    love.graphics.circle("line", 100,555, 10)
+    display_func()
     love.graphics.print("scatter_plot")
 
 end

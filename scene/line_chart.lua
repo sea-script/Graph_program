@@ -17,7 +17,7 @@ function line_chart.keypressed(key)
 end
 
 function line_chart.draw()
-    love.graphics.circle("line", 100,555, 10)
+    display_func()
     love.graphics.print("line_chart")
 end
 

@@ -1,7 +1,7 @@
 _G.love = require("love")
 
 --load the possible scenes
---bar chart, line chart, Scatter Plot, area chart 
+--bar chart, line chart, Scatter Plot, area chart
 local menu = require("scene.menu")
 local bar_chart = require("scene.bar_chart")
 local line_chart = require("scene.line_chart")
@@ -13,10 +13,10 @@ current_scn = menu
 
 function love.load()
     --color
-    red = {1,0,0}
-    green = {0,1,0}
-    blue = {0,0,1}
-    white = {1,1,1}
+    red = { 1, 0, 0 }
+    green = { 0, 1, 0 }
+    blue = { 0, 0, 1 }
+    white = { 1, 1, 1 }
     --dimensions, global
     width, height = love.graphics.getDimensions()
     --input buffer, global
@@ -30,8 +30,8 @@ function love.update(dt)
     current_scn.update(dt)
 end
 
-function love.mousepressed(x,y,mouseID)
-    current_scn.mousepressed(mouse_x,mouse_y,mouseID)
+function love.mousepressed(x, y, mouseID)
+    current_scn.mousepressed(mouse_x, mouse_y, mouseID)
 end
 
 function love.keypressed(key)
