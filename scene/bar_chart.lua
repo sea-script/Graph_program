@@ -5,15 +5,27 @@ function bar_chart.load()
     --!!!!!!!!! remeber to update the xaxis var !!!!!!!!!
     display = {x = margin, y = margin, width = width - margin*2, height = height - margin*2, margin = margin, xaxis_input = 0, yaxis_input = 10}
     x_step_size = display.width / display.xaxis_input
+    y_step_size = display.height / 10
     --or enter the number with the keyboard
     bars = {}
 
-    input_button = {x = display.x + display.width + 5, y = display.y + display.height - 10, value = "0", margin = 4}
-    --must be outside bc the button variables are only defined after the line is finished
-    input_button.width = love.graphics.getFont():getWidth(input_button.value) + input_button.margin
-    input_button.height = love.graphics.getFont():getHeight() + input_button.margin
+    input_button_x = {x = display.x + display.width + 5, y = display.y + display.height - 10, value = "0", margin = 4}
+    --the var below must be outside bc the button variables are only defined after the line is finished
+    input_button_x.width = love.graphics.getFont():getWidth(input_button_x.value) + input_button_x.margin
+    input_button_x.height = love.graphics.getFont():getHeight() + input_button_x.margin
+
+    --other button
+    input_button_y = {x =  20, y = display.y - 10, value = "0", margin = 4}
+    input_button_y.width = love.graphics.getFont():getWidth(input_button_y.value) + input_button_y.margin
+    input_button_y.height = love.graphics.getFont():getHeight() + input_button_y.margin
+
+    y_values = {}
+    for i = 1, 10 do
+        y_values[i] = 0
+    end
 
     bar_num_input_mode = false
+    max_value_input_mode = false
 end
 
 function bar_chart.update(dt)
@@ -44,10 +56,16 @@ end
 function bar_chart.mousepressed(mouse_x, mouse_y, mouseID)
     --inputing the number of bars
     if mouseID == 1 then
-        if mouse_x >= input_button.x and mouse_x <= input_button.x + input_button.width and mouse_y >= input_button.y and mouse_y <= input_button.y + input_button.height then
-            love.graphics.setColor(1,1,1)
+        if mouse_x >= input_button_x.x and mouse_x <= input_button_x.x + input_button_x.width and mouse_y >= input_button_x.y and mouse_y <= input_button_x.y + input_button_x.height then
             --enable typing mode, it will show a text saying ti enter a number
             bar_num_input_mode = true
+            max_value_input_mode = false
+            user_input = ""
+        end
+        if mouse_x >= input_button_y.x and mouse_x <= input_button_y.x + input_button_y.width and mouse_y >= input_button_y.y and mouse_y <= input_button_y.y + input_button_y.height  then
+            max_value_input_mode = true
+            bar_num_input_mode = false
+            user_input = ""
         end
     end
 
@@ -60,11 +78,24 @@ function bar_chart.keypressed(key)
             bar_num_input_mode = false --de-activate input mode 
             local num = tonumber(user_input) --convert to number
             display.xaxis_input = num --store the number on the display var
-            input_button.value = tostring(num) --to print the value
+            input_button_x.value = tostring(num) --to print the value
             user_input = "" --empty it
-            input_button.width = love.graphics.getFont():getWidth(input_button.value) + input_button.margin --update the width
+            input_button_x.width = love.graphics.getFont():getWidth(input_button_x.value) + input_button_x.margin --update the width
 
             bar_chart.update_bars() --update the bars
+        elseif max_value_input_mode and user_input ~= "" then
+            max_value_input_mode = false
+            local num = tonumber(user_input)
+            input_button_y.value = user_input
+            user_input = ""
+            input_button_y.width = love.graphics.getFont():getWidth(input_button_y.value) + input_button_y.margin
+
+            y_values[10] = "0"
+            for i = 1, 10 do
+                local value = num - ((num/10) * i)
+                local str_value = string.format("%.1f", value)
+                y_values[i] = str_value
+            end
         end
         
     end
@@ -72,6 +103,8 @@ end
 
 function bar_chart.textinput(t)
     if bar_num_input_mode then
+        user_input = user_input .. t
+    elseif max_value_input_mode then
         user_input = user_input .. t
     end
 end
@@ -95,18 +128,28 @@ function bar_chart.draw()
 
     --bars number input button
     love.graphics.setColor(white)
-    love.graphics.rectangle("line", input_button.x, input_button.y, input_button.width, input_button.height)
-    love.graphics.print(input_button.value, input_button.x+input_button.margin/2, input_button.y+input_button.margin/2)
+    love.graphics.rectangle("line", input_button_x.x, input_button_x.y, input_button_x.width, input_button_x.height)
+    love.graphics.print(input_button_x.value, input_button_x.x+input_button_x.margin/2, input_button_x.y+input_button_x.margin/2)
+    --other button
+    love.graphics.rectangle("line", input_button_y.x, input_button_y.y, input_button_y.width, input_button_y.height)
+    love.graphics.print(input_button_y.value, input_button_y.x+input_button_y.margin/2, input_button_y.y+input_button_y.margin/2)
 
     --input mode
     if bar_num_input_mode then
-        love.graphics.print("Enter a number: ", width/2-40, display.margin/2)
-        love.graphics.print("Typing: " .. user_input, 80, 200)
+        love.graphics.print("Enter a number: ".. user_input, width/2-40, (3*display.margin/2) + display.height)
+    end
+    if max_value_input_mode then
+        love.graphics.print("Enter a number: ".. user_input, width/2-40, (3*display.margin/2) + display.height)
     end
 
     --draw the bars
     for i = 1, display.xaxis_input do
         love.graphics.rectangle("fill", bars[i].x, bars[i].y, bars[i].width, bars[i].height)
+    end
+
+    --draw the values
+    for i = 1, display.yaxis_input do
+        love.graphics.print(y_values[i], 20, display.y + y_step_size*(i) - 10)
     end
     
 end
