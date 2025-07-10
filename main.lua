@@ -21,6 +21,13 @@ function love.load()
     width, height = love.graphics.getDimensions()
     --input buffer, global
     user_input = ""
+    local margin = 50
+    --!!!!!!!!! remeber to update the xaxis var !!!!!!!!!
+    --this will be used over all other files
+    display = { x = margin, y = margin, width = width - margin * 2, height = height - margin * 2, margin = margin, xaxis_input = 0, yaxis_input = 10 }
+    x_step_size = display.width / display.xaxis_input
+    y_step_size = display.height / 10
+    
     current_scn.load()
 end
 

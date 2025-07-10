@@ -1,6 +1,7 @@
 bar_chart = {}
 
 function bar_chart.load()
+    --restart the values
     local margin = 50
     --!!!!!!!!! remeber to update the xaxis var !!!!!!!!!
     --this will be used over all other files
@@ -25,8 +26,8 @@ function bar_chart.load()
         y_values[i] = 0
     end
 
-    bar_num_input_mode = false
-    max_value_input_mode = false
+    x_num_input_mode = false
+    y_num_input_mode = false 
 end
 
 function bar_chart.update(dt)
@@ -56,14 +57,16 @@ end
 function bar_chart.mousepressed(mouse_x, mouse_y, mouseID)
     --inputing the number of bars
     if mouseID == 1 then
+        --first button
         if mouse_x >= input_button_x.x and mouse_x <= input_button_x.x + input_button_x.width and mouse_y >= input_button_x.y and mouse_y <= input_button_x.y + input_button_x.height then
             --enable typing mode, it will show a text saying ti enter a number
             bar_num_input_mode = true
-            max_value_input_mode = false
+            y_num_input_mode = false
             user_input = ""
         end
+        --second one
         if mouse_x >= input_button_y.x and mouse_x <= input_button_y.x + input_button_y.width and mouse_y >= input_button_y.y and mouse_y <= input_button_y.y + input_button_y.height then
-            max_value_input_mode = true
+            y_num_input_mode = true
             bar_num_input_mode = false
             user_input = ""
         end
@@ -83,8 +86,8 @@ function bar_chart.keypressed(key)
             input_button_x.margin                                                                                 --update the width
 
             bar_chart.update_bars()                                                                               --update the bars
-        elseif max_value_input_mode and user_input ~= "" then
-            max_value_input_mode = false
+        elseif y_num_input_mode and user_input ~= "" then
+            y_num_input_mode = false
             local num = tonumber(user_input)
             input_button_y.value = user_input
             user_input = ""
@@ -103,7 +106,7 @@ end
 function bar_chart.textinput(t)
     if bar_num_input_mode then
         user_input = user_input .. t
-    elseif max_value_input_mode then
+    elseif y_num_input_mode then
         user_input = user_input .. t
     end
 end
@@ -145,7 +148,7 @@ function bar_chart.draw()
     if bar_num_input_mode then
         love.graphics.print("Enter a number: " .. user_input, width / 2 - 40, (3 * display.margin / 2) + display.height)
     end
-    if max_value_input_mode then
+    if y_num_input_mode then
         love.graphics.print("Enter a number: " .. user_input, width / 2 - 40, (3 * display.margin / 2) + display.height)
     end
 
