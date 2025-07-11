@@ -27,8 +27,31 @@ function love.load()
     display = { x = margin, y = margin, width = width - margin * 2, height = height - margin * 2, margin = margin, xaxis_input = 0, yaxis_input = 10 }
     x_step_size = display.width / display.xaxis_input
     y_step_size = display.height / 10
-    
+
     current_scn.load()
+end
+
+function displaying_usr_input()
+    --input mode
+    if x_num_input_mode then
+        love.graphics.print("Enter a number: " .. user_input, width / 2 - 40, (3 * display.margin / 2) + display.height)
+    end
+    if y_num_input_mode then
+        love.graphics.print("Enter a number: " .. user_input, width / 2 - 40, (3 * display.margin / 2) + display.height)
+    end
+end
+
+function display_func()
+    --the borders
+    love.graphics.setColor(red)
+    love.graphics.rectangle("line", display.x, display.x, display.width, display.height)
+    --lines
+    love.graphics.setColor(blue)
+    --always 10 on the y axis(?)
+    for i = 1, 10 do
+        love.graphics.line(display.margin, (display.height + display.margin) - (display.height / 10) * i,
+            display.margin + display.width, (display.height + display.margin) - (display.height / 10) * i)
+    end
 end
 
 function love.update(dt)

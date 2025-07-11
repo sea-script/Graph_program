@@ -77,16 +77,17 @@ end
 function line_chart.keypressed(key)
     if key == "return" then
         if x_num_input_mode and user_input ~= "" then
-            x_num_input_mode = false                                                                             --de-activate input mode
-            local num = tonumber(user_input)                                                                     --convert to number
+            x_num_input_mode = false             --de-activate input mode
+            local num = tonumber(user_input)     --convert to number
             display.xaxis_input =
-                num                                                                                              --store the number on the display var
-            input_button_x.value = tostring(num)                                                                 --to print the value
-            user_input = ""                                                                                      --empty it
+                num                              --store the number on the display var
+            input_button_x.value = tostring(num) --to print the value
+            user_input =
+            ""                                   --empty it
             input_button_x.width = love.graphics.getFont():getWidth(input_button_x.value) +
-            input_button_x.margin                                                                                --update the width
+                input_button_x.margin            --update the width
 
-            line_chart.update_dots()                                                                             --update dimensions here
+            line_chart.update_dots()             --update dimensions here
         elseif y_num_input_mode and user_input ~= "" then
             --no need to update the dimensions here
             y_num_input_mode = false
