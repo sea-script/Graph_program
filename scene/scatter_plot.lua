@@ -22,6 +22,13 @@ function scatter_plot.load()
 
     y_num_input_mode = false
     x_num_input_mode = false
+
+    mouse_x_display = 0
+    mouse_y_display = 0
+
+    display.xaxis_input = 0
+
+    dis_points = {}
 end
 
 function scatter_plot.update_x_axis()
@@ -33,7 +40,13 @@ function scatter_plot.update_x_axis()
 end
 
 function scatter_plot.update(dt)
-
+    --the value of the mouse inside the display 
+    if (mouse_x >= display.x and mouse_x <= display.x + display.width and mouse_y >= display.y and mouse_y <= display.y + display.height) then
+        --the (mouse _pos - the beginning of the display)/display.width --> the % of the mouse pos, so if mouse pose == beginning, that 0%, if it's the end, it will be 100%, so now just multiply this by the max value of each axis, so 0 = 0, 100% = the max of the axis
+        mouse_x_display = (display.xaxis_input * (mouse_x - display.x)) / display.width --(mouse_x - display.x) veeery important
+        mouse_y_display = (tonumber(input_button_y.value) * (height-(mouse_y + display.y)))/display.height --invert the y axis
+    end
+    
 end
 
 function scatter_plot.mousepressed(mouse_x, mouse_y, mouseID)
@@ -51,6 +64,9 @@ function scatter_plot.mousepressed(mouse_x, mouse_y, mouseID)
             y_num_input_mode = true
             x_num_input_mode = false
             user_input = ""
+        end
+        if mouse_x >= display.x and mouse_x <= display.x + display.width and mouse_y >= display.y and mouse_y <= display.y + display.height then
+            dis_points[#dis_points+1] = {x=mouse_x, y=mouse_y}
         end
     end
 end
@@ -83,6 +99,8 @@ function scatter_plot.keypressed(key)
                 y_values[i] = str_value
             end
         end
+        --restart all points
+        dis_points = {}
     end
 end
 
@@ -127,6 +145,13 @@ function scatter_plot.draw()
     --Y values
     for i = 1, 9 do
         love.graphics.print(x_values[i], (y_step_size * (i+1)) - 20 , display.y+display.height + 5)
+    end
+
+    love.graphics.setColor(green)
+    love.graphics.print("(" .. string.format("%.1f", mouse_x_display) .. " , " .. string.format("%.1f", mouse_y_display) .. ")", 0, height - 25) --pos value inside the display 
+
+    for i = 1, #dis_points do
+        love.graphics.circle("fill", dis_points[i].x, dis_points[i].y, 5)
     end
 end
 
