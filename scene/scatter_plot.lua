@@ -150,6 +150,7 @@ function scatter_plot.draw()
     love.graphics.setColor(green)
     love.graphics.print("(" .. string.format("%.1f", mouse_x_display) .. " , " .. string.format("%.1f", mouse_y_display) .. ")", 0, height - 25) --pos value inside the display 
 
+    --points 
     for i = 1, #dis_points do
         love.graphics.circle("fill", dis_points[i].x, dis_points[i].y, 5)
     end
